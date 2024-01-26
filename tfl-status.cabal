@@ -1,0 +1,63 @@
+cabal-version: 3.0
+name:          tfl
+version:       0.1.0.0
+synopsis:      A command line tool to fetch the status of London's transport network.
+
+-- description:
+
+license:      MIT
+license-file: LICENSE
+author:       mmzk1526
+maintainer:   mmzk1526@outlook.com
+build-type:   Simple
+
+extra-doc-files:
+    CHANGELOG.md
+    README.md
+
+extra-source-files:
+    .env
+
+common warnings
+    ghc-options: -Wall
+
+executable tfl-status
+    import:           warnings
+    main-is:          Main.hs
+    other-modules:
+        MMZK.App,
+        MMZK.Read,
+        MMZK.Utils,
+        Model.LineName,
+        Model.TransportStatus,
+        Opt,
+        Opt.Utils,
+        Service.Fetch
+    default-extensions:
+        BlockArguments,
+        DataKinds,
+        DeriveAnyClass,
+        DeriveGeneric,
+        DerivingStrategies,
+        DuplicateRecordFields,
+        FlexibleContexts,
+        InstanceSigs,
+        LambdaCase,
+        NoFieldSelectors,
+        OverloadedRecordDot,
+        OverloadedStrings,
+        TypeApplications
+    build-depends:
+        aeson >= 2.2.1 && < 2.3,
+        base ^>=4.17.2.0,
+        bytestring >= 0.11.5 && < 0.12,
+        directory,
+        data-default,
+        transformers >= 0.5.6 && < 0.6,
+        text >= 2.0.2 && < 2.1,
+        aeson-pretty >= 0.8.10 && < 0.9,
+        http-client >= 0.7.15 && < 0.8,
+        http-client-tls >= 0.3.6 && < 0.4,
+        prettyprinter >= 1.7.1 && < 1.8,
+    hs-source-dirs:   src
+    default-language: Haskell2010
