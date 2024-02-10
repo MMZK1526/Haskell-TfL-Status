@@ -13,4 +13,4 @@ fetchTFLStatus = do
   resp <- httpJSON @TransportStatus
     $ "https://api.tfl.gov.uk/Line/Mode/tube,dlr,overground,elizabeth-line,tram/Status"
     ? [ "detail"  =: "true", "app_key" =: fromString apiKey ]
-  pure $ H.responseBody resp
+  pure . filterNow $ H.responseBody resp
