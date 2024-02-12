@@ -32,8 +32,7 @@ data TransportStatusEntry = TransportStatusEntry
 
 instance Pretty TransportStatusEntry where
   pretty :: TransportStatusEntry -> Doc ann
-  pretty entry = pretty entry.id <> ":"
-             <+> align lineStatuses
+  pretty entry = pretty entry.id <> ":"  <+> align lineStatuses
     where
       lineStatuses = case entry.lineStatuses of
         [] -> "Good service"
@@ -43,7 +42,9 @@ instance Pretty TransportStatusEntry where
 type TransportStatus = [TransportStatusEntry]
 
 filterNow :: TransportStatus -> TransportStatus
-filterNow = map \entry -> entry { lineStatuses = filter (any (.isNow) . (.validityPeriods)) entry.lineStatuses }
+filterNow = map \entry ->
+  entry { lineStatuses
+            = filter (any (.isNow) . (.validityPeriods)) entry.lineStatuses }
 {-# INLINE filterNow #-}
 
 filterOnLines :: [LineName] -> TransportStatus -> TransportStatus
