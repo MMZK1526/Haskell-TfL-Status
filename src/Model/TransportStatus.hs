@@ -1,14 +1,25 @@
 module Model.TransportStatus where
 
 import           Data.Aeson (FromJSON, ToJSON)
+import           Data.Time.Clock
+import           Data.Time.Format.ISO8601
 import           GHC.Generics
 import           Model.LineName
 import           Prettyprinter
 
 data ValidityPeriod = ValidityPeriod
-  { isNow :: Bool
+  { isNow    :: Bool
+  , fromDate :: UTCTime
+  , toDate   :: UTCTime
   } deriving stock (Eq, Ord, Show, Generic)
     deriving anyclass (FromJSON, ToJSON)
+
+instance Pretty ValidityPeriod where
+  pretty :: ValidityPeriod -> Doc ann
+  pretty period = pretty (iso8601Show period.fromDate)
+              <+> "-"
+              <+> pretty (iso8601Show period.toDate)
+  {-# INLINE pretty #-}
 
 data DelayEntry = DelayEntry
   { statusSeverity            :: Int
@@ -21,7 +32,8 @@ data DelayEntry = DelayEntry
 instance Pretty DelayEntry where
   pretty :: DelayEntry -> Doc ann
   pretty entry = pretty entry.statusSeverityDescription
-             <+> maybe mempty (parens . pretty) entry.reason
+             <+> maybe mempty (parens . pretty) (entry.reason)
+             <+> pretty entry.validityPeriods
   {-# INLINE pretty #-}
 
 data TransportStatusEntry = TransportStatusEntry
